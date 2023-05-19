@@ -56,7 +56,7 @@ public class SetmaelServiceImpl extends ServiceImpl<SetmelMapper, Setmeal> imple
         queryWrapper.eq(Setmeal::getStatus,1);
         int count = this.count(queryWrapper);
         if (count>0) {
-            //        不能删除 抛出一个业务异常
+            //        不能删除抛出一个业务异常
         throw new CustomException("套餐中正在售卖，不能删除");
         }
 //        可以删除 删除套餐中的数据

@@ -6,7 +6,6 @@ import com.reggie.common.R;
 import com.reggie.dto.SetmealDto;
 import com.reggie.entity.Category;
 import com.reggie.entity.Setmeal;
-import com.reggie.entity.SetmealDish;
 import com.reggie.service.CategoryService;
 import com.reggie.service.SetmealDishService;
 import com.reggie.service.SetmealService;
@@ -16,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -77,5 +75,27 @@ public class SetmealController {
     public R<String> remove(@RequestParam List<Long> ids){
         setmealService.removeWithDish(ids);
         return R.success("套餐删除成功");
+    }
+
+    /**
+     * 修改套餐的状态
+     * @param status   restful status状态
+     * @param ids          要更新的setmeal的ids
+     * @return
+     */
+    @PostMapping("/status/{status}")
+    public R<String> updateStatus(@PathVariable Integer status,@RequestParam List<Long> ids){
+        List<Setmeal> setmeals = setmealService.listByIds(ids);
+        setmeals = setmeals.stream().map((item)->{
+            item.setStatus(status);
+            return item;
+        }).collect(Collectors.toList());
+        setmealService.updateBatchById(setmeals);
+        return R.success("状态修改成功");
+    }
+
+    @GetMapping("/{id}")
+    public R<String> updateSetmeal(@PathVariable Long id){
+        return R.success("套餐修改成功");
     }
 }
